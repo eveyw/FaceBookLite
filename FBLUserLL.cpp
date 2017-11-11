@@ -29,7 +29,10 @@
      {
          p=p->Next;
      }
-     return p->Data;
+     if(p!=NULL)
+         return p->Data;
+     else
+         return NULL;
  }
  bool FBLUserLL::CheckUid(const string & _uid)
  {
@@ -47,13 +50,41 @@
      {
          return false;
      }
-     FBLUserLL* p=this;
      FBLUser* NewData=new FBLUser(_Uid,_Psd,_First,_Last);
      FBLUserLL* NewElement=new FBLUserLL(NewData);
-     while(p->Next!=NULL)
+     NewElement->Next=Next;
+     Next=NewElement;
+     return true;
+ }
+
+ void FBLUserLL::PrintAll()
+ {
+     FBLUserLL* tmp=Next;
+     while(tmp!=NULL)
      {
+         cout<<*(tmp->Data)<<endl;
+         tmp=tmp->Next;
+     }
+ }
+
+ void FBLUserLL::Sort()
+ {
+     FBLUserLL* p=Next;
+     FBLUserLL* q=Next;
+     FBLUser* tmp;
+     while(p!=NULL)
+     {
+         q=p->Next;
+         while(q!=NULL)
+         {
+             if(p->Data->GetLast()>q->Data->GetLast())
+             {
+                 tmp=p->Data;
+                 p->Data=q->Data;
+                 q->Data=tmp;
+             }
+             q=q->Next;
+         }
          p=p->Next;
      }
-     p->Next=NewElement;
-     return true;
  }

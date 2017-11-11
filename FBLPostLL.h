@@ -8,13 +8,16 @@
      private:
          FBLPost* Data;
          FBLPostLL* Next;
+         int opt;
      public:
          FBLPostLL();
          FBLPostLL(FBLPost* post);
          ~FBLPostLL();
-         void InsertPost(string text);
+         FBLPost* InsertPost(string text);
+         void InsertPost(FBLPost* NewData);
          void DeleteTop();
-         void ReadPost();
+         FBLPost* ReadPost();
+         void ReadAllPost(int opt=0);
  };
 
  #endif

@@ -14,11 +14,60 @@
  {
      return(Userid==_Uid);
  }
- void FBLUser::ReadTop()
+ FBLPost* FBLUser::ReadTop()
  {
-     PostList.ReadPost();
+     return(PostList.ReadPost());
  }
  void FBLUser::Post(const string & text)
  {
-     PostList.InsertPost(text);
+     unsigned i;
+     FBLPost* tmp;
+     tmp=WallList.InsertPost(text);
+     for(i=0;i<FriendList.size();i++)
+     {
+         FriendList[i]->PostList.InsertPost(tmp);
+     }
+ }
+ bool FBLUser::AddFriend(FBLUser* user)
+ {
+     unsigned i;
+     if(this==user) return false;
+     for(i=0;i<FriendList.size();i++)
+     {
+         if(FriendList[i]==user)
+         {
+             return false;
+         }
+     }
+     FriendList.push_back(user);
+     user->FriendList.push_back(this);
+     return true;
+ }
+ void FBLUser::ListFriend()
+ {
+     unsigned i;
+     for(i=0;i<FriendList.size();i++)
+     {
+         cout<<FriendList[i]->First<<" "<<FriendList[i]->Last<<endl;
+     }
+ }
+ void FBLUser::AllWall()
+ {
+     WallList.ReadAllPost(1);
+ }
+
+ void FBLUser::AllPost()
+ {
+     PostList.ReadAllPost();
+ }
+
+ string FBLUser::GetLast()
+ {
+     return(Last);
+ }
+
+ ostream & operator << (ostream &out, FBLUser &user)
+ {
+     out<<user.Last<<", "<<user.First<<" <"<<user.Userid<<">";
+     return out;
  }

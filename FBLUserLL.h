@@ -15,6 +15,8 @@
          FBLUser* LogIn(const string & _uid);
          bool CheckUid(const string & _uid);
          bool InsertUser(const string & _Uid,const string & _Psd,const string & _First,const string & _Last);
+         void PrintAll();
+         void Sort();
  };
  #endif // FBLUSERLL_H
 

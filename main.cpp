@@ -8,12 +8,48 @@
  #include"FBLUserLL.h"
  using namespace std;
 
- void SceondMenu(FBLUser* user)
+ void ThirdMenu(FBLPost* post)
+ {
+     string commond;
+     string text;
+     char argv[3][40];
+     int argc;
+     cout<<"Third Menu"<<endl;
+     do
+     {
+         getline(cin,commond);
+         argc=sscanf(commond.c_str(),"%s%s%s",argv[0],argv[1],argv[2]);
+         if(strcmp(argv[0],"COMMENT")==0 && argc==2)
+         {
+             text.assign(argv[1]);
+             post->Comment(text);
+             cout<<"COMMENT Success"<<endl;
+         }
+         if(strcmp(argv[0],"LIKE")==0 && argc==1)
+         {
+             post->AddLike();
+         }
+         if(strcmp(argv[0],"READ_AZ")==0 && argc==1)
+         {
+             post->ReadAZ();
+         }
+         if(strcmp(argv[0],"READ_ZA")==0 && argc==1)
+         {
+             post->ReadZA();
+         }
+     }while(strcmp(argv[0],"DONE")!=0);
+ }
+
+ void SceondMenu(FBLUserLL& UserList,FBLUser* user)
  {
      string commond;
      char argv[3][40];
      string text;
+     string uid;
      int argc;
+     FBLUser* f_uid;
+     FBLPost* post;
+     cout<<"Second Menu"<<endl;
      do
      {
          getline(cin,commond);
@@ -26,7 +62,40 @@
          }
          if(strcmp(argv[0],"READ")==0 && argc==1)
          {
-             user->ReadTop();
+             post=user->ReadTop();
+             ThirdMenu(post);
+         }
+         if(strcmp(argv[0],"FRIEND")==0 && argc==2)
+         {
+             uid.assign(argv[1]);
+             f_uid=UserList.LogIn(uid);
+             if(f_uid!=NULL)
+             {
+                 if(user->AddFriend(f_uid))
+                 {
+                     cout<<"Add friend success"<<endl;
+                 }
+                 else
+                 {
+                     cout<<"Can not add this friend"<<endl;
+                 }
+             }
+             else
+             {
+                 cout<<"Error UID"<<endl;
+             }
+         }
+         if(strcmp(argv[0],"MYFRIENDS")==0 && argc==1)
+         {
+             user->ListFriend();
+         }
+         if(strcmp(argv[0],"MYWALL")==0 && argc==1)
+         {
+             user->AllWall();
+         }
+         if(strcmp(argv[0],"MYFEED")==0 && argc==1)
+         {
+             user->AllPost();
          }
      }while(strcmp(argv[0],"LOGOUT")!=0);
  }
@@ -41,6 +110,7 @@
      string last;
      FBLUser* user;
      int argc;
+     cout<<"Top Menu"<<endl;
      do
      {
          getline(cin,commond);
@@ -60,19 +130,28 @@
                  cout<<"Create fail"<<endl;
              }
          }
-         if(strcmp(argv[0],"LOGIN")==0 && argc==2)
+         if(strcmp(argv[0],"LOGIN")==0 && argc==3)
          {
              uid.assign(argv[1]);
+             psd.assign(argv[2]);
              user=UserList.LogIn(uid);
-             if(user!=NULL)
+             if(user!=NULL && user->CheckPsd(psd))
              {
                  cout<<"Login Success"<<endl;
-                 SceondMenu(user);
+                 SceondMenu(UserList,user);
              }
              else
              {
                  cout<<"Login fail"<<endl;
              }
+         }
+         if(strcmp(argv[0],"USERS")==0 && argc==1)
+         {
+             UserList.PrintAll();
+         }
+         if(strcmp(argv[0],"SORTUSERS")==0 && argc==1)
+         {
+             UserList.Sort();
          }
      }while(strcmp(argv[0],"QUIT")!=0);
  }
