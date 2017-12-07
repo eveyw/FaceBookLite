@@ -63,7 +63,10 @@
          if(strcmp(argv[0],"READ")==0 && argc==1)
          {
              post=user->ReadTop();
-             ThirdMenu(post);
+             if(post!=NULL)
+             {
+                 ThirdMenu(post);
+             }
          }
          if(strcmp(argv[0],"FRIEND")==0 && argc==2)
          {
